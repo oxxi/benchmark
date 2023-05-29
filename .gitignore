@@ -1,0 +1,30 @@
+### VisualStudioCode ###
+.vscode
+
+##Nest
+Nestjs/service_one/node_modules
+Nestjs/service_two/node_modules
+
+Nestjs/service_one/dist
+Nestjs/service_two/dist
+
+
+#dotNet
+dotNet/FirstService/.vs
+dotNet/FirstService/FirstService/bin
+dotNet/FirstService/FirstService/obj
+dotNet/SecondService/SecondService/.vs
+dotNet/SecondService/SecondService/SecondService/bin
+dotNet/SecondService/SecondService/SecondService/obj
+
+##GO Golang
+Go/FirstService_GOLAND/*.exe
+Go/SecondService_GOLAND/*.exe
+
+
+###JAVA
+Java/FirstService/.ida
+Java/FirstService/src/target
+
+Java/SecondService/.ida
+Java/SecondService/src/target
