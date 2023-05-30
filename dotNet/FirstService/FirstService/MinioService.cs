@@ -14,7 +14,7 @@ namespace FirstService
         public MinioService(MinioConfig options)
         {
             _config = options;
-            _client = new MinioClient().WithEndpoint(_config.Uri).WithCredentials("CREDENCIAL_MINIO", "8hAkY7LfPcrzgr3L9EFjumJyQj4tqqLQeT8QhXDr").WithSSL(false).Build();
+            _client = new MinioClient().WithEndpoint(_config.Uri).WithCredentials(_config.MinioAccessKey, _config.MinioSecretKey).WithSSL(_config.MinioSSL).Build();
             
         }
 
@@ -27,7 +27,7 @@ namespace FirstService
             string fileName = string.Format("dotNet{0}.txt", id);
 
             var file =  new MemoryStream(Encoding.UTF8.GetBytes(id));
-            PutObjectArgs putObjet = new PutObjectArgs().WithBucket("test")
+            PutObjectArgs putObjet = new PutObjectArgs().WithBucket(_config.MinioBucket)
                                               .WithObject(fileName)
                                               .WithStreamData(file)
                                               .WithObjectSize(file.Length)

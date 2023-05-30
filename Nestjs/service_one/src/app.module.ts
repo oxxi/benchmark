@@ -15,7 +15,7 @@ import { MinioModule } from 'nestjs-minio-client';
         return {
           endPoint: config.get('MINIO_ENDPOINT'),
           port: parseInt(config.get('MINIO_PORT')),
-          useSSL: false,
+          useSSL: Boolean(config.get('MINIO_SSL')),
           accessKey: config.get('MINIO_ACCESS_KEY'),
           secretKey: config.get('MINIO_SECRET_KEY'),
         };

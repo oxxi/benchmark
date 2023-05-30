@@ -34,6 +34,8 @@ import java.util.concurrent.ExecutionException;
 @CrossOrigin("*")
 public class FirstServiceController {
 
+    @Value("${MINIO_ENDPOINT}")
+    private String minioHost;
     @Value("${MINIO_PORT}")
     private int port;
     @Value("${MINIO_ACCESS_KEY}")
@@ -43,6 +45,9 @@ public class FirstServiceController {
 
     @Value("${MINIO_BUCKET_NAME}")
     private String bucket;
+
+    @Value("${MINIO_SSL}")
+    private boolean isSecure;
 
     @Value("${SECOND_SERVICE}")
     private String endPoint;
@@ -92,7 +97,7 @@ public class FirstServiceController {
                                                     .contentType("application/octet-stream")
                                                     .build();
         try{
-            MinioClient minioClient = MinioSingleton.getInstance(accessKey, secretKey, port).getMinioInstance();
+            MinioClient minioClient = MinioSingleton.getInstance(minioHost,accessKey, secretKey, port,isSecure).getMinioInstance();
             ObjectWriteResponse response = minioClient.putObject(args);
             ResponseMinio resp = ResponseMinio.builder().Etag(response.etag()).versionId(response.versionId()).build();
             return resp;

@@ -64,37 +64,12 @@ func main() {
 		w.WriteHeader(200)
 		w.Write(json)
 	})
+	fmt.Println("servicio iniciado en puerto 3000")
 
 	if err = http.ListenAndServe(":3000", nil); err != nil {
 		panic(err)
 	}
-	fmt.Println("servicio iniciado en puerto 3000")
 
-	/* app := fiber.New()
-
-	app.Get("/", func(c *fiber.Ctx) error {
-
-		//call second service
-		str, err := getIdFromService()
-		if err != nil {
-			c.Response().SetStatusCode(fiber.StatusInternalServerError)
-			return c.JSON("Error al consultar segundo servicio")
-		}
-		//call minio
-		info, err := uploadToMinio(str)
-		if err != nil {
-			c.Response().SetStatusCode(fiber.StatusInternalServerError)
-			return c.JSON(err)
-		}
-
-		c.Response().SetStatusCode(fiber.StatusOK)
-		return c.JSON(map[string]interface{}{
-			"message": info,
-			"status":  "Ok",
-		})
-	})
-
-	app.Listen(":3000") */
 }
 
 func getIfFromServiceASync(service GetOsVariables) <-chan ResponseService {
@@ -102,7 +77,6 @@ func getIfFromServiceASync(service GetOsVariables) <-chan ResponseService {
 	res := make(chan ResponseService)
 	go func() {
 		var result ResponseService
-		//	response, err := http.Get(os.Getenv("SECOND_SERVICE"))
 		response, err := http.Get(url)
 		if err != nil {
 			result.Id = ""
@@ -119,24 +93,6 @@ func getIfFromServiceASync(service GetOsVariables) <-chan ResponseService {
 	return res
 }
 
-/* func getIdFromService() (string, error) {
-
-	response, err := http.Get(os.Getenv("SECOND_SERVICE"))
-
-	if err != nil {
-		fmt.Println(err)
-		return "", err
-	}
-	defer response.Body.Close()
-	body, err := io.ReadAll(response.Body)
-	if err != nil {
-		return "", err
-	}
-
-	return string(body), nil
-
-} */
-
 func uploadToMinio(str string, service GetOsVariables) (info minio.UploadInfo, err error) {
 
 	//url := fmt.Sprintf("%s:%s", os.Getenv("MINIO_ENDPOINT"), os.Getenv("MINIO_PORT"))
@@ -148,7 +104,7 @@ func uploadToMinio(str string, service GetOsVariables) (info minio.UploadInfo, e
 
 	minioClient, err := minio.New(service.EndPoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(service.MinioAccessKey, service.MinioAccessSecret, ""),
-		Secure: false,
+		Secure: service.MinioSSL,
 	})
 
 	if err != nil {

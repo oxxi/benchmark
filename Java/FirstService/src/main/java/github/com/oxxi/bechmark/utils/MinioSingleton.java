@@ -2,7 +2,6 @@ package github.com.oxxi.bechmark.utils;
 
 
 import io.minio.MinioClient;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
@@ -16,10 +15,10 @@ public final class MinioSingleton {
     private MinioClient minioClient;
     private  MinioSingleton(){}
 
-    public synchronized static MinioSingleton getInstance(String accessKey,String secretKey, int port) {
+    public synchronized static MinioSingleton getInstance(String host,String accessKey,String secretKey, int port, boolean secure ) {
         if (instance == null) {
             instance = new MinioSingleton();
-            instance.minioClient = MinioClient.builder().endpoint("localhost",port,false)
+            instance.minioClient = MinioClient.builder().endpoint(host,port,secure)
                     .credentials(accessKey,secretKey).build();
         }
         return  instance;
